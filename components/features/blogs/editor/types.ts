@@ -25,12 +25,16 @@ export const DEFAULT_FMT: FormatState = {
 export interface BlogEditorProps {
   blog: Blog | null;
   categories: Category[];
+  label?: string; // "Blog" | "Case Study"
+  basePath?: string; // public base path for slug preview
   onClose: () => void;
   onSave: (payload: BlogPayload | BlogUpdatePayload, isNew: boolean) => Promise<void>;
 }
 
 export interface InfoPageProps {
   isEdit: boolean;
+  label: string;
+  basePath: string;
   title: string;
   setTitle: (v: string) => void;
   slug: string;

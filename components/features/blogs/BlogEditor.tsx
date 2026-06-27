@@ -16,7 +16,14 @@ const readAsBase64 = (file: File): Promise<string> =>
     reader.readAsDataURL(file);
   });
 
-export default function BlogEditor({ blog, categories, onClose, onSave }: BlogEditorProps) {
+export default function BlogEditor({
+  blog,
+  categories,
+  label = 'Blog',
+  basePath = '/resources/blogs',
+  onClose,
+  onSave,
+}: BlogEditorProps) {
   const isEdit = Boolean(blog);
   const editorRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -257,6 +264,8 @@ export default function BlogEditor({ blog, categories, onClose, onSave }: BlogEd
     return (
       <InfoPage
         isEdit={isEdit}
+        label={label}
+        basePath={basePath}
         title={title}
         setTitle={handleTitleChange}
         slug={slug}

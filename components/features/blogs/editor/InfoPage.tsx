@@ -8,6 +8,8 @@ import { InfoPageProps } from './types';
 
 export function InfoPage({
   isEdit,
+  label,
+  basePath,
   title,
   setTitle,
   slug,
@@ -41,7 +43,7 @@ export function InfoPage({
       {/* Top bar */}
       <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-6 py-3">
         <span className="text-base font-semibold text-slate-800">
-          {isEdit ? 'Edit Blog' : 'New Blog'} — Details
+          {isEdit ? `Edit ${label}` : `New ${label}`} — Details
         </span>
         <div className="flex items-center gap-2">
           <button
@@ -111,7 +113,7 @@ export function InfoPage({
                 onChange={(e) => setSlug(e.target.value)}
                 placeholder="auto-generated-from-title"
               />
-              <p className="text-xs text-slate-400">/resources/blogs/{slug || 'your-slug'}</p>
+              <p className="text-xs text-slate-400">{basePath}/{slug || 'your-slug'}</p>
             </div>
             <div className="space-y-2">
               <Label>Status</Label>

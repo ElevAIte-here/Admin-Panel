@@ -8,7 +8,7 @@ import { createSupabaseBrowserClient } from '@/lib/supabase/client';
 
 const NAV = [
   { href: '/admin/blogs', label: 'Blogs', icon: FileText, enabled: true },
-  { href: '/admin/case-studies', label: 'Case Studies', icon: Layers, enabled: false },
+  { href: '/admin/case-studies', label: 'Case Studies', icon: Layers, enabled: true },
   { href: '/admin/knowledge-hub', label: 'Knowledge Hub', icon: BookOpen, enabled: false },
 ];
 

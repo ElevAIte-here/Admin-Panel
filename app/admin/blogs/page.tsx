@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Plus, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 import { Blog, BlogPayload, BlogUpdatePayload, Category } from '@/lib/types';
-import { fetchBlogs, createBlog, updateBlog, deleteBlog } from '@/lib/api-client';
+import { listContent, createContent, updateContent, deleteContent } from '@/lib/api-client';
 import BlogsTable from '@/components/features/blogs/BlogsTable';
 import BlogEditor from '@/components/features/blogs/BlogEditor';
 import { Button } from '@/components/ui/button';
@@ -25,7 +25,7 @@ export default function ManageBlogsPage() {
   const loadBlogs = async (args?: { search?: string; page?: number }) => {
     setLoading(true);
     try {
-      const result = await fetchBlogs({
+      const result = await listContent('blogs', {
         search: args?.search ?? search,
         page: args?.page ?? page,
         perPage: PAGE_SIZE,
@@ -75,10 +75,10 @@ export default function ManageBlogsPage() {
   const handleSave = async (payload: BlogPayload | BlogUpdatePayload, isNew: boolean) => {
     try {
       if (isNew) {
-        await createBlog(payload as BlogPayload);
+        await createContent('blogs', payload as BlogPayload);
         toast.success('Blog created');
       } else {
-        await updateBlog(editingBlog!.id, payload as BlogUpdatePayload);
+        await updateContent('blogs', editingBlog!.id, payload as BlogUpdatePayload);
         toast.success('Blog updated');
       }
       closeEditor();
@@ -91,7 +91,7 @@ export default function ManageBlogsPage() {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteBlog(id);
+      await deleteContent('blogs', id);
       toast.success('Blog deleted');
       await loadBlogs();
     } catch (error) {

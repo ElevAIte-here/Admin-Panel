@@ -1,5 +1,8 @@
 import type { Blog, BlogPayload, BlogUpdatePayload, Paged } from '@/lib/types';
 
+// resource is the API segment: 'blogs' | 'case-studies'
+export type ContentResource = 'blogs' | 'case-studies';
+
 async function parse(res: Response) {
   const data = await res.json().catch(() => ({}));
   if (!res.ok || data.success === false) {
@@ -8,22 +11,21 @@ async function parse(res: Response) {
   return data;
 }
 
-export async function fetchBlogs(params: {
-  search?: string;
-  page?: number;
-  perPage?: number;
-}): Promise<Paged<Blog>> {
+export async function listContent(
+  resource: ContentResource,
+  params: { search?: string; page?: number; perPage?: number }
+): Promise<Paged<Blog>> {
   const q = new URLSearchParams();
   if (params.search) q.set('search', params.search);
   q.set('page', String(params.page || 1));
   q.set('per_page', String(params.perPage || 10));
-  const data = await parse(await fetch(`/api/blogs?${q.toString()}`));
+  const data = await parse(await fetch(`/api/${resource}?${q.toString()}`));
   return data.data as Paged<Blog>;
 }
 
-export async function createBlog(payload: BlogPayload) {
+export async function createContent(resource: ContentResource, payload: BlogPayload) {
   return parse(
-    await fetch('/api/blogs', {
+    await fetch(`/api/${resource}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -31,9 +33,9 @@ export async function createBlog(payload: BlogPayload) {
   );
 }
 
-export async function updateBlog(id: string, payload: BlogUpdatePayload) {
+export async function updateContent(resource: ContentResource, id: string, payload: BlogUpdatePayload) {
   return parse(
-    await fetch(`/api/blogs/${id}`, {
+    await fetch(`/api/${resource}/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -41,6 +43,6 @@ export async function updateBlog(id: string, payload: BlogUpdatePayload) {
   );
 }
 
-export async function deleteBlog(id: string) {
-  return parse(await fetch(`/api/blogs/${id}`, { method: 'DELETE' }));
+export async function deleteContent(resource: ContentResource, id: string) {
+  return parse(await fetch(`/api/${resource}/${id}`, { method: 'DELETE' }));
 }
