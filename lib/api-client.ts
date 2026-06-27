@@ -1,7 +1,7 @@
 import type { Blog, BlogPayload, BlogUpdatePayload, Paged } from '@/lib/types';
 
 // resource is the API segment: 'blogs' | 'case-studies'
-export type ContentResource = 'blogs' | 'case-studies';
+export type ContentResource = 'blogs' | 'case-studies' | 'knowledge';
 
 async function parse(res: Response) {
   const data = await res.json().catch(() => ({}));
