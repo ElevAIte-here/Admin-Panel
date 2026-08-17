@@ -36,6 +36,8 @@ const EXT: Record<string, string> = {
   'image/gif': 'gif',
 };
 
+const STATIC_IMAGE_CACHE = '31536000';
+
 function parseImage(value: string) {
   const m = value.match(/^data:(image\/[\w.+-]+);base64,(.+)$/);
   if (m) return { contentType: m[1], buffer: Buffer.from(m[2], 'base64') };
@@ -49,7 +51,11 @@ export async function uploadCoverImage(base64: string): Promise<string> {
   const key = `blogs/${randomUUID()}.${ext}`;
   const { error } = await supabase.storage
     .from(STORAGE_BUCKET)
-    .upload(key, buffer, { contentType, upsert: false });
+    .upload(key, buffer, {
+      contentType,
+      upsert: false,
+      cacheControl: STATIC_IMAGE_CACHE,
+    });
   if (error) throw new Error(`Storage upload failed: ${error.message}`);
   const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(key);
   return data.publicUrl;
